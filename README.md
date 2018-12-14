@@ -7,9 +7,9 @@
 - This project looks for available issues of the SZ and then downloads them into a named docker volume. Additionally, it keeps track of all downloaded volumes in a sqlite database. Now you could run this project once a day (or, once a week) to fetch the newest issue(s) for personal archival purposes.
 
 ## How to Use
-#. Download run.sh: `wget https://raw.githubusercontent.com/kiliant/paper-archive/master/run.sh && chmod +x run.sh`
-#. Adapt to you needs (enter username and password)
-#. Execute `./run.sh`
+1. Download run.sh: `wget https://raw.githubusercontent.com/kiliant/paper-archive/master/run.sh && chmod +x run.sh`
+1. Adapt to you needs (enter username and password)
+1. Execute `./run.sh`
 
 ## Improvements
 This project is not by any means feature-complete.
