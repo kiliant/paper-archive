@@ -1,3 +1,5 @@
+# Copyright (C) 2018 Thomas A. Kilian <kiliant@in.tum.de>. All Rights Reserved.
+
 from selenium.webdriver import Firefox, FirefoxProfile
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
