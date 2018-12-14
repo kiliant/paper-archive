@@ -3,10 +3,6 @@ image: docker:stable
 services:
   - docker:dind
 
-stages:
-    - build
-    - push
-
 variables:
   CONTAINER_IMAGE: registry.gitlab.com/$CI_PROJECT_PATH
 
