@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS issues;
+
+CREATE TABLE issues (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  type TEXT NOT NULL,
+  issue_date DATE NOT NULL
+);
+
+
