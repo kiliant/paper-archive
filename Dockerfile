@@ -9,4 +9,4 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckod
 ADD paper-archive.py .
 ADD schema.sql .
 
-CMD ["python3", "paper-archive.py"]
+CMD ["python3", "-u", "paper-archive.py"]
