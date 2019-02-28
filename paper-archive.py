@@ -28,7 +28,7 @@ def lookup_issue(db, issue, date):
 def initiate_download(href):
     browser.get(href)
 
-    button = WebDriverWait(browser, 10).until(
+    button = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".navigation-bar > div:nth-child(3) > sz-daily-download-thumb-tray-control:nth-child(2) > div:nth-child(1) > a:nth-child(1)"))
             )
     #button = browser.find_element_by_css_selector(".navigation-bar > div:nth-child(3) > sz-daily-download-thumb-tray-control:nth-child(2) > div:nth-child(1) > a:nth-child(1)")
@@ -44,7 +44,7 @@ def initiate_download(href):
         print("issue ("+issue+", "+date.strftime('%Y-%m-%d')+") is already known")
         return
 
-    download_whole = WebDriverWait(browser, 10).until(
+    download_whole = WebDriverWait(browser, 30).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "span.thumbtray-download-options > a:nth-child(1)"))
             )
 
