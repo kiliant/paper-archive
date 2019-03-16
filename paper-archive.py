@@ -5,6 +5,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
+import re
 import sqlite3
 import dateparser
 import time
@@ -13,16 +14,16 @@ import os
 DB_FILE = "/data/db.sqlite"
 TARGET_DIR = "/data/"
 
-def register_issue(db, issue, date):
+def register_issue(db, issue, date, foreignID):
     cursor = db.cursor()
-    cursor.execute("INSERT INTO issues(type, issue_date) VALUES (?,?)", (issue, date.strftime('%Y-%m-%d')))
+    cursor.execute("INSERT INTO issues(type, issue_date, foreignID) VALUES (?,?,?)", (issue, date.strftime('%Y-%m-%d'), foreignID))
     db.commit()
     return
 
 # check whether we have to download issue
-def lookup_issue(db, issue, date):
+def lookup_issue(db, issue, date, foreignID):
     cursor = db.cursor()
-    cursor.execute("SELECT * FROM issues WHERE type=? AND issue_date=?", (issue, date.strftime('%Y-%m-%d')))
+    cursor.execute("SELECT * FROM issues WHERE type=? AND issue_date=? AND foreignID=?", (issue, date.strftime('%Y-%m-%d'), foreignID))
     return cursor.fetchone() == None
 
 def initiate_download(href):
@@ -37,11 +38,13 @@ def initiate_download(href):
     issue = browser.find_elements_by_css_selector(".navigation-bar > div:nth-child(2) > h1:nth-child(1)")[0].text
     date = dateparser.parse(browser.find_elements_by_css_selector(".navigation-bar > div:nth-child(2) > span:nth-child(2)")[0].text, languages=['de', 'en'], settings={'TIMEZONE': 'UTC'})
 
-    if lookup_issue(db, issue, date):
-        print("issue ("+issue+", "+date.strftime('%Y-%m-%d')+") is fresh!")
-        register_issue(db, issue, date)
+    m = re.search("webreader/(.*)", href)
+    foreignID = m.group(1)
+    if lookup_issue(db, issue, date, foreignID):
+        print("issue ("+issue+", "+date.strftime('%Y-%m-%d')+", "+foreignID+") is fresh!")
+        register_issue(db, issue, date, foreignID)
     else:
-        print("issue ("+issue+", "+date.strftime('%Y-%m-%d')+") is already known")
+        print("issue ("+issue+", "+date.strftime('%Y-%m-%d')+", "+foreignID+") is already known")
         return
 
     download_whole = WebDriverWait(browser, 30).until(
@@ -92,7 +95,8 @@ for element in list(set(elements)):
 links = list(set(links))
 
 for x in links:
-    initiate_download(x)
+    if x is not None:
+        initiate_download(x)
 
 while [f for f in os.listdir(TARGET_DIR) if os.path.isfile(os.path.join(TARGET_DIR, f)) and ".part" in f] != []:
     print("waiting for downloads to finish")
